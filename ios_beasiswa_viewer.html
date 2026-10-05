@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Progress Beasiswa Anak PTK</title>
+  <title>Validasi Final Beasiswa Anak-PTK</title>
   <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
@@ -31,6 +31,7 @@
       max-width: 480px;
     }
 
+    /* Header Glass Card */
     .header-card {
       background: var(--glass-bg);
       backdrop-filter: blur(20px);
@@ -68,6 +69,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
+    /* Item Card (iOS Style List Card) */
     .item-card {
       background: var(--glass-bg);
       backdrop-filter: blur(16px);
@@ -148,59 +150,36 @@
     </div>
 
     <div id="card-container">
-      <div class="loading">Memuat data dari spreadsheet...</div>
+      <div class="loading">Memuat data dari Google Apps Script...</div>
     </div>
   </div>
 
   <script>
-    const dataBeasiswa = [
-      {"no": 1, "namaPTK": "AGUSMAN HADI", "namaMurid": "SYAKILA ADZKIYA HADI", "tanggalLahir": "20 November 2018", "kelas": "II.A", "lembaga": "SD Islam Khadijah"},
-      {"no": 2, "namaPTK": "AHMAD MUZAWIRIN", "namaMurid": "AHMAD NU'AIM", "tanggalLahir": "8 November 2026", "kelas": "IV A", "lembaga": "SD Islam Assunnah"},
-      {"no": 3, "namaPTK": "AHMAD MUZAWIRIN", "namaMurid": "AHMAD SABIQ EL-FATHAN", "tanggalLahir": "16 Maret 2021", "kelas": "TKA", "lembaga": "TK Islam Assunnah"},
-      {"no": 4, "namaPTK": "Ahmani", "namaMurid": "Fahad Abdurrahman", "tanggalLahir": "11 Mei 2012", "kelas": "IX.A", "lembaga": "SMP Islam As-Sunnah"},
-      {"no": 5, "namaPTK": "Ahmani", "namaMurid": "Saqila", "tanggalLahir": "3 Februari 2015", "kelas": "VA", "lembaga": "SD Islam Khadijah"},
-      {"no": 6, "namaPTK": "Ahmani", "namaMurid": "Yazid usamah", "tanggalLahir": "9 Juni 2016", "kelas": "IVA", "lembaga": "SD Islam Assunnah"},
-      {"no": 7, "namaPTK": "AHSANUL FIRDAUS", "namaMurid": "M. FARIQ KHOIRON KATSIRO", "tanggalLahir": "8 Januari 2017", "kelas": "IV. B", "lembaga": "SD Islam Assunnah"},
-      {"no": 8, "namaPTK": "Akrama Maswah", "namaMurid": "Adhwa' Suari Batsiqoh", "tanggalLahir": "11 Mei 2018", "kelas": "IIB", "lembaga": "SD Islam Khadijah"},
-      {"no": 9, "namaPTK": "Asraruddin", "namaMurid": "Habiburrahman Adzra Abdullah", "tanggalLahir": "26 Februari 2016", "kelas": "VB", "lembaga": "SD Islam Assunnah"},
-      {"no": 10, "namaPTK": "Asraruddin", "namaMurid": "Balqis Almasayir", "tanggalLahir": "19 September 2019", "kelas": "IA", "lembaga": "SD Islam Khadijah"},
-      {"no": 11, "namaPTK": "Fitri Rohyani", "namaMurid": "ABDURRAHMAN AZZAM", "tanggalLahir": "26 April 2018", "kelas": "IIA", "lembaga": "SD Islam Assunnah"},
-      {"no": 12, "namaPTK": "Johana Cahya Peberiyana", "namaMurid": "Madina Hafiza Shanum", "tanggalLahir": "4 April 2021", "kelas": "TKA", "lembaga": "TK Islam Assunnah"},
-      {"no": 13, "namaPTK": "Kamaludin", "namaMurid": "Qonita Nur Fadila", "tanggalLahir": "25 November 2011", "kelas": "IXB", "lembaga": "SMP Islam As-Sunnah"},
-      {"no": 14, "namaPTK": "Khaeril anwar", "namaMurid": "Harun Anwar", "tanggalLahir": "3 Maret 2017", "kelas": "IVA", "lembaga": "SD Islam Assunnah"},
-      {"no": 15, "namaPTK": "Khaeril anwar", "namaMurid": "Khofiyya anwar", "tanggalLahir": "1 Januari 2015", "kelas": "VIB", "lembaga": "SD Islam Khadijah"},
-      {"no": 16, "namaPTK": "Khairudin", "namaMurid": "Aufia Rizki Rhomadoni", "tanggalLahir": "17 Agustus 2010", "kelas": "XB", "lembaga": "SMA Islam Khadijah"},
-      {"no": 17, "namaPTK": "Khairudin", "namaMurid": "Wafy Rayyan", "tanggalLahir": "24 April 2021", "kelas": "TKB", "lembaga": "TK Islam Assunnah"},
-      {"no": 18, "namaPTK": "Lalu ripatizzikri", "namaMurid": "Lalu Uwais Al Qosim", "tanggalLahir": "25 Oktober 2018", "kelas": "IIB", "lembaga": "SD Islam Assunnah"},
-      {"no": 19, "namaPTK": "MASTARUDIN", "namaMurid": "ZAINAB", "tanggalLahir": "9 Mei 2011", "kelas": "IXA", "lembaga": "SMP Islam Khadijah"},
-      {"no": 20, "namaPTK": "MASTARUDIN", "namaMurid": "Abdullah Mastar", "tanggalLahir": "2 September 2014", "kelas": "VA", "lembaga": "SD Islam Assunnah"},
-      {"no": 21, "namaPTK": "MASTARUDIN", "namaMurid": "FATHIMAH", "tanggalLahir": "3 Januari 2019", "kelas": "IIB", "lembaga": "SD Islam Khadijah"},
-      {"no": 22, "namaPTK": "Muttakin", "namaMurid": "Dalilah Watsiqah", "tanggalLahir": "3 April 2020", "kelas": "IA", "lembaga": "SD Islam Khadijah"},
-      {"no": 23, "namaPTK": "Risda Rahmi", "namaMurid": "Abdullah Alharits", "tanggalLahir": "6 Januari 2019", "kelas": "ll B", "lembaga": "SD Islam Assunnah"},
-      {"no": 24, "namaPTK": "Risda Rahmi", "namaMurid": "Umar Alharits", "tanggalLahir": "23 September 2020", "kelas": "TKB", "lembaga": "TK Islam Assunnah"},
-      {"no": 25, "namaPTK": "Sirajul Palah", "namaMurid": "Tamim Aqsho", "tanggalLahir": "9 November 2008", "kelas": "XIIA", "lembaga": "SMA Islam As-Sunnah"},
-      {"no": 26, "namaPTK": "Sirajul Palah", "namaMurid": "UWAIS QARNI", "tanggalLahir": "28 November 2014", "kelas": "VIA", "lembaga": "SD Islam Assunnah"},
-      {"no": 27, "namaPTK": "Siti Maryam", "namaMurid": "FATHIN ADZKIYA NAHDA", "tanggalLahir": "1 Januari 2020", "kelas": "IA", "lembaga": "SD Islam Khadijah"},
-      {"no": 28, "namaPTK": "Yusri", "namaMurid": "Umaer Hasan", "tanggalLahir": "29 Januari 2017", "kelas": "IIIA", "lembaga": "SD Islam Assunnah"},
-      {"no": 29, "namaPTK": "Yusri", "namaMurid": "Ziyad Naufal", "tanggalLahir": "30 Maret 2012", "kelas": "VIIIA", "lembaga": "SMP Islam As-Sunnah"},
-      {"no": 30, "namaPTK": "Zahriah", "namaMurid": "Afra jauhari", "tanggalLahir": "12 Desember 2020", "kelas": "TKB", "lembaga": "TK Islam Assunnah"},
-      {"no": 31, "namaPTK": "Zahriah", "namaMurid": "Adzilla Ramdhani", "tanggalLahir": "8 April 2022", "kelas": "TK A1", "lembaga": "TK Islam Assunnah"}
-    ];
-
     window.onload = function() {
       var now = new Date();
       var timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).toLowerCase();
-      var dateString = now.toLocaleDateString('en-GB'); 
+      var dateString = now.toLocaleDateString('en-GB');
       document.getElementById('update-time').innerText = "Update: " + timeString + " " + dateString;
 
-      renderData(dataBeasiswa);
+      // Masukkan URL Web App Google Apps Script Anda di sini
+      var webAppUrl = "https://script.google.com/macros/s/AKfycbwgqf5FBmQfNSGahyf_v9blC4P3ebRBs-LbxVH1xdqOpi74yPklFVWe9VmQegoX50IDEA/exec"; 
+
+      fetch(webAppUrl)
+        .then(response => response.json())
+        .then(data => {
+          renderData(data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('card-container').innerHTML = "<div class='loading'>Gagal mengambil data dari Google Apps Script. Pastikan URL Web App benar dan akses diset ke 'Anyone'.</div>";
+        });
     };
 
     function renderData(data) {
       var container = document.getElementById('card-container');
       container.innerHTML = "";
 
-      if (data.length === 0) {
+      if (!data || data.length === 0) {
         container.innerHTML = "<div class='loading'>Tidak ada data ditemukan.</div>";
         return;
       }
