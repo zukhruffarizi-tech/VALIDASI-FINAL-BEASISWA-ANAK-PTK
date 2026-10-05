@@ -1,173 +1,23 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Progress Beasiswa Anak PTK</title>
-  <style>
-    :root {
-      --bg-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-      --glass-bg: rgba(255, 255, 255, 0.65);
-      --glass-border: rgba(255, 255, 255, 0.8);
-      --text-main: #1c1c1e;
-      --text-muted: #8e8e93;
-      --accent-blue: #007aff;
-      --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg-gradient);
-      background-attachment: fixed;
-      margin: 0;
-      padding: 20px;
-      color: var(--text-main);
-      display: flex;
-      justify-content: center;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 480px;
-    }
-
-    /* Header Glass Card */
-    .header-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 24px;
-      text-align: center;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow);
-    }
-
-    .header-card h1 {
-      font-size: 22px;
-      font-weight: 700;
-      margin: 0 0 6px 0;
-      letter-spacing: -0.5px;
-    }
-
-    .header-card .author {
-      font-size: 14px;
-      color: var(--accent-blue);
-      font-weight: 500;
-      margin-bottom: 12px;
-    }
-
-    .badge-update {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.8);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 500;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    }
-
-    /* Item Card (iOS Style List Card) */
-    .item-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      margin-bottom: 16px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: transform 0.2s ease;
-    }
-
-    .item-card:active {
-      transform: scale(0.98);
-    }
-
-    .card-header {
-      background: rgba(255, 255, 255, 0.4);
-      padding: 12px 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-    }
-
-    .card-header.highlight {
-      background: rgba(255, 243, 176, 0.5); /* Sentuhan warna kuning lembut seperti contoh */
-    }
-
-    .card-header .no-label {
-      font-weight: 600;
-      color: var(--accent-blue);
-      font-size: 15px;
-    }
-
-    .card-header .ptk-name {
-      font-weight: 700;
-      color: var(--accent-blue);
-      font-size: 15px;
-      text-transform: uppercase;
-      letter-spacing: -0.3px;
-    }
-
-    .card-body {
-      padding: 14px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .row-info {
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-    }
-
-    .row-info .label {
-      color: var(--text-muted);
-    }
-
-    .row-info .value {
-      font-weight: 600;
-      color: var(--text-main);
-      text-align: right;
-    }
-
-    .loading {
-      text-align: center;
-      color: var(--text-muted);
-      padding: 40px;
-      font-size: 14px;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="container">
-    <div class="header-card">
-      <h1>Progress Beasiswa Anak PTK</h1>
-      <div class="author">© Zukhruf Farizi</div>
-      <div class="badge-update" id="update-time">Memuat waktu...</div>
-    </div>
-
-    <div id="card-container">
-      <div class="loading">Memuat data dari spreadsheet...</div>
-    </div>
-  </div>
-
-  <script>
+<script>
     window.onload = function() {
       // Mengatur waktu update otomatis
       var now = new Date();
       var timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).toLowerCase();
-      var dateString = now.toLocaleDateString('en-GB'); // format dd/mm/yyyy
+      var dateString = now.toLocaleDateString('en-GB'); 
       document.getElementById('update-time').innerText = "Update: " + timeString + " " + dateString;
 
-      // Mengambil data dari Google Apps Script
-      google.script.run.withSuccessHandler(renderData).getDataBeasiswa();
+      // Masukkan URL Web App Google Apps Script Anda di dalam tanda kutip di bawah ini:
+      var webAppUrl = "https://script.google.com/macros/s/AKfycbwn2YwGu9HWFYMUmMRRWib2fNim6BhuMqhCAnIAa-khpqcyMiGQ40oNmMBBX-4xus34RA/exec";
+
+      fetch(webAppUrl)
+        .then(response => response.json())
+        .then(data => {
+          renderData(data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('card-container').innerHTML = "<div class='loading'>Gagal memuat data dari spreadsheet.</div>";
+        });
     };
 
     function renderData(data) {
@@ -180,7 +30,6 @@
       }
 
       data.forEach(function(item, index) {
-        // Berikan highlight kuning lembut pada beberapa nomor tertentu jika diinginkan (misal index 1 & 2 seperti contoh)
         var isHighlight = (index === 1 || index === 2) ? "highlight" : "";
 
         var card = document.createElement('div');
@@ -210,5 +59,3 @@
       });
     }
   </script>
-</body>
-</html>
