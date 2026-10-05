@@ -1,18 +1,11 @@
-function doGet() {
-  return HtmlService.createTemplateFromFile('Index')
-         .evaluate()
-         .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
-         .setTitle('Progress Beasiswa Anak PTK');
-}
-
-function getDataBeasiswa() {
+function doGet(e) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Sheet1");
-  var rows = sheet.getRange("A6:F36").getValues(); // Mengambil data sesuai rentang tabel Anda
-  
+  var rows = sheet.getRange("A6:F36").getValues();
   var dataList = [];
+  
   for (var i = 0; i < rows.length; i++) {
     var row = rows[i];
-    if (row[1] !== "") { // Pastikan kolom Nama PTK tidak kosong
+    if (row[1] !== "") {
       dataList.push({
         no: row[0],
         namaPTK: row[1],
@@ -23,5 +16,7 @@ function getDataBeasiswa() {
       });
     }
   }
-  return dataList;
+  
+  return ContentService.createTextOutput(JSON.stringify(dataList))
+                      .setMimeType(ContentService.MimeType.JSON);
 }
